@@ -13,12 +13,12 @@ public interface CustomerManagementService
 	/**
 	 * The specified customer is updated in the database.
 	 */
-	public void updateCustomer(Customer changedCustomer);
+	public void updateCustomer(Customer changedCustomer) throws CustomerNotFoundException;
 	
 	/**
 	 * The specified customer is removed from the database
 	 */
-	public void deleteCustomer(Customer oldCustomer);
+	public void deleteCustomer(Customer oldCustomer) throws CustomerNotFoundException ;
 	
 	/**
 	 * Finds the customer by Id

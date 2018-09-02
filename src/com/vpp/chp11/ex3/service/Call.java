@@ -20,6 +20,20 @@ public class Call
 	 */
 	private String notes;
 	
+	private String customerId;
+	
+	
+	
+	public Call(int id, Date timeAndDate, String notes, String customerId) {
+		super();
+		this.id = id;
+		this.timeAndDate = timeAndDate;
+		this.notes = notes;
+		this.customerId = customerId;
+	}
+
+
+
 	/**
 	 * Constructor for Call
 	 * @param notes eg "Martha from Acme Corp Called etc"
@@ -29,6 +43,8 @@ public class Call
 		// this defaults to a timestamp of "now"
 		this (notes, new java.util.Date());
 	}
+	
+	
 	
 	/**
 	 * Constructor for Call if the automatic timestamp needs to be overridden
@@ -56,6 +72,10 @@ public class Call
 	public void setTimeAndDate(Date timeAndDate) {
 		this.timeAndDate = timeAndDate;
 	}
+	
+	public int getId() {
+		return id;
+	}
 
 	public String getNotes() {
 		return notes;
@@ -63,6 +83,13 @@ public class Call
 
 	public void setNotes(String notes) {
 		this.notes = notes;
+	}
+	public String getCustomerId() {
+		return customerId;
+	}
+	
+	public void setCustomerId(String customerId) {
+		this.customerId = customerId;
 	}
 	
 	// needed for JPA - ignore until then

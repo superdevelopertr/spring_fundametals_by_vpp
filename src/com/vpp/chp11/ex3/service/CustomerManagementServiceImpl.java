@@ -2,6 +2,8 @@ package com.vpp.chp11.ex3.service;
 
 import java.util.List;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+
 
 public class CustomerManagementServiceImpl implements CustomerManagementService {
 
@@ -18,21 +20,30 @@ public class CustomerManagementServiceImpl implements CustomerManagementService 
 	}
 
 	@Override
-	public void updateCustomer(Customer changedCustomer) {
-		// TODO Auto-generated method stub
-
+	public void updateCustomer(Customer changedCustomer) throws CustomerNotFoundException {
+		try {
+			customerDAO.update(changedCustomer);
+		} catch (Exception e) {
+			throw new CustomerNotFoundException();
+		}
 	}
 
 	@Override
-	public void deleteCustomer(Customer oldCustomer) {
-		// TODO Auto-generated method stub
-
+	public void deleteCustomer(Customer oldCustomer) throws CustomerNotFoundException {
+		try {
+			customerDAO.delete(oldCustomer);
+		} catch (RecordNotFoundException e) {
+			throw new CustomerNotFoundException();
+		}
 	}
 
 	@Override
 	public Customer findCustomerById(String customerId) throws CustomerNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return customerDAO.getById(customerId);
+		} catch (RecordNotFoundException e) {
+			throw new CustomerNotFoundException();
+		}
 	}
 
 	@Override
@@ -55,8 +66,11 @@ public class CustomerManagementServiceImpl implements CustomerManagementService 
 
 	@Override
 	public void recordCall(String customerId, Call callDetails) throws CustomerNotFoundException {
-		// TODO Auto-generated method stub
-
+		try {
+			customerDAO.addCall(callDetails, customerId);
+		} catch (RecordNotFoundException e) {
+			throw new CustomerNotFoundException();
+		}
 	}
 
 }

@@ -13,18 +13,12 @@
 		<constructor-arg ref="dataSource"/>
 	</bean>
 
-	<bean id="customerDAO" class="com.virtualpairprogrammers.dataaccess.CustomerDAOJdbcTemplateImpl">
+	<bean id="customerDAO" class="com.vpp.chp11.ex3.service.CustomerDAOJdbcTemplateImpl">
 		<constructor-arg ref="jdbcTemplate"/>
 	</bean>
 	
-	<bean id="customerManService" class="com.virtualpairprogrammers.services.customers.CustomerManagementServiceImpl">
+	<bean id="customerManService" class="com.vpp.chp11.ex3.service.CustomerManagementServiceImpl">
 		<constructor-arg ref="customerDAO"/>
-	</bean>
-	
-	<bean id="diaryManService" class="com.virtualpairprogrammers.services.diary.DiaryManagementServiceImpl"/>
-	<bean id="callhandlingService"  class="com.virtualpairprogrammers.services.calls.CallHandlingServiceImpl">
-		<constructor-arg ref="customerManService"/>
-		<constructor-arg ref="diaryManService"/>
 	</bean>
 
 </beans>

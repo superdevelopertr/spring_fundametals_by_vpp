@@ -9,6 +9,8 @@ public class Customer
 
 	private String customerId;
 	
+	private String customerName;
+	
 	/**
 	 * The company name
 	 */
@@ -37,10 +39,10 @@ public class Customer
 	/**
 	 * Constructor - id, notes and name are required
 	 */
-	public Customer(String customerId, String companyName, String email,
+	public Customer(String customerId, String customerName, String companyName, String email,
 			        String telephone, String notes)
 	{
-		this(customerId, companyName, notes);
+		this(customerId, customerName, companyName, notes);
 		this.email = email;
 		this.telephone = telephone;
 	}
@@ -48,9 +50,10 @@ public class Customer
 	/**
 	 * Constructor - email and telephone are optional
 	 */
-	public Customer(String customerId, String companyName, String notes)
+	public Customer(String customerId, String customerName, String companyName, String notes)
 	{
 		this.customerId = customerId;
+		this.customerName= customerName;
 		this.companyName = companyName;
 		this.notes = notes;
 		this.calls = new ArrayList<Call>();
@@ -119,6 +122,14 @@ public class Customer
 
 	public void setCalls(List<Call> calls) {
 		this.calls = calls;
+	}
+	
+	public String getCustomerName() {
+		return customerName;
+	}
+	
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 	// needed for JPA - ignore until then

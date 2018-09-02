@@ -1,0 +1,28 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"  
+            "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<property name="driverClass" value="org.postgresql.Driver"/>
+		<property name="url" value="jdbc:postgresql://localhost:5432/book_db"/>
+		<property name="username" value="postgres"/>
+		<property name="password" value="postgres"/>
+	</bean>
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+
+	<bean id="customerDAO" class="com.vpp.chp13.ex1.CustomerDAOJdbcTemplateImpl">
+		<constructor-arg ref="jdbcTemplate"/>
+	</bean>
+	
+	<bean id="customerManServiceTarget" class="com.vpp.chp13.ex1.CustomerManagementServiceImpl">
+		<constructor-arg ref="customerDAO"/>
+	</bean>
+	
+	<bean id="customerManService" class="com.vpp.chp13.ex1.CustomerManagementTimingProxyImpl">
+		<constructor-arg ref="customerManServiceTarget"/>
+	</bean>
+
+</beans>
