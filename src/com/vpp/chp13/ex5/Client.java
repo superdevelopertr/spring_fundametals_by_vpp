@@ -19,7 +19,6 @@ public class Client {
 		try {
 			ts.getTicketByPnr("T123");
 		} catch (TicketNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

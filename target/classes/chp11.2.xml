@@ -11,7 +11,7 @@
 		<constructor-arg ref="dataSource"/>
 	</bean>
 	
-	<bean class="com.vpp.chp11.ex.service.BookServiceRealImpl">
+	<bean class="com.vpp.chp11.ex2.service.BookServiceRealImpl">
 		<constructor-arg name="jdbcTemplate"  ref="jdbcTemplate"/>
 	</bean>
 </beans>

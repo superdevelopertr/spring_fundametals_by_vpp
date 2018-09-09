@@ -1,20 +1,32 @@
 package com.vpp.chp11.ex2.service;
 
+import java.util.Date;
+
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Client {
 	public static void main(String[] args) {
-		System.out.println("buying a book...");
-		ClassPathXmlApplicationContext container = new ClassPathXmlApplicationContext("chp11.xml");
-		
-		BookService bookService=container.getBean(BookService.class);
+		ClassPathXmlApplicationContext container = new ClassPathXmlApplicationContext("cph11.2.xml");
+		CustomerManagementService cms = container.getBean(CustomerManagementService.class);
 		
 		try {
-			bookService.findByISDN("121aas");
-		} catch (BookNotFoundException e) {
-			System.out.println("Sorry that book is not found. Isdn is "+e.getIsdn());
+			//cms.newCustomer(new Customer("C123", "Berkin Bozkus", "Amadeus", "berkin.bozkus@amadeus.com", "5301721008", "good guy"));
+
+			Customer customerToUpdate=cms.findCustomerById("C123");
+			System.out.println(customerToUpdate);
+			
+			customerToUpdate.setCustomerName("AbdullahI");
+			
+			cms.updateCustomer(customerToUpdate);
+			
+			cms.recordCall("C123", new Call(1, new Date(), "test call", "C123"));
+			
+			//cms.deleteCustomer(customerToUpdate);
+			
+		} catch (CustomerNotFoundException e) {
+			System.out.println("Oops customer is not founded");
 		}
 		
-		container.close();
+		
 	}
 }

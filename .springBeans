@@ -8,6 +8,7 @@
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
 		<config>resources/chp9.xml</config>
+		<config>resources/chp14.1.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

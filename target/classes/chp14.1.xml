@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver"/>
+		<property name="url" value="jdbc:postgresql://localhost:5432/store_db"/>
+		<property name="username" value="postgres"/>
+		<property name="password" value="postgres"/>
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource"/>
+	</bean>
+	
+	<bean id="bookDAO" class="com.vpp.chp14.dao.BookDAOImpl">
+		<constructor-arg ref="jdbcTemplate"/>
+	</bean>
+	<bean id="accountDAO" class="com.vpp.chp14.dao.AccountDAOImpl">
+		<constructor-arg ref="jdbcTemplate"/>
+	</bean>
+
+	<bean id="bookService" class="com.vpp.chp14.service.BookServiceImpl">
+		<constructor-arg ref="bookDAO"/>
+	</bean>
+	<bean id="acountService" class="com.vpp.chp14.service.AccountServiceImpl">
+		<constructor-arg ref="accountDAO"/>
+	</bean>
+	
+	<bean id="purchasingService" class="com.vpp.chp14.service.PurchasingServiceImpl">
+		<constructor-arg ref="bookService"/>
+		<constructor-arg ref="acountService"/>
+	</bean>
+	
+	<bean id="performanceAspect" class="com.vpp.chp14.aspect.PerformanceTiming"/>
+	
+	<aop:config>
+		<aop:aspect ref="performanceAspect">
+			<aop:around method="calcTime" pointcut="execution(* com.vpp.chp14.dao.*.*(..))"/>
+		</aop:aspect>
+	</aop:config>
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<tx:annotation-driven/>
+</beans>
