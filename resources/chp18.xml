@@ -1,52 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- these are xml schemas to validate tag we use in this xml file -->
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
-	<!--  postgresql
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="org.postgresql.Driver"/>
-		<property name="url" value="jdbc:postgresql://localhost:5432/store_db"/>
-		<property name="username" value="postgres"/>
-		<property name="password" value="postgres"/>
-	</bean>
-	-->
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
-		<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/book_db?useSSL=false"/>
-		<property name="username" value="root"/>
-		<property name="password" value="1234"/>
-	</bean>
 	
-	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-		<constructor-arg ref="dataSource"/>
-	</bean>
+
+	<!-- mysql <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"> 
+		<property name="driverClassName" value="com.mysql.jdbc.Driver"/> <property 
+		name="url" value="jdbc:mysql://localhost:3306/book_db?useSSL=false"/> <property 
+		name="username" value="root"/> <property name="password" value="1234"/> </bean> -->
 	
-	<bean id="bookDAO" class="com.vpp.chp18.BookDAOImpl">
-		<constructor-arg ref="jdbcTemplate"/>
+	<!-- id is arbitrary can be anything. It will refered by other bean via this id
+		 class is simple who implement javax.sql.DataSource. In this case we use dbcp connection pool  -->
+	<!-- property name is simple setter method name without setter,
+		 value is static parameter -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="org.postgresql.Driver" />
+		<property name="url" value="jdbc:postgresql://localhost:5432/store_db" />
+		<property name="username" value="postgres" />
+		<property name="password" value="postgres" />
 	</bean>
+
+	<!-- creating SpringTransactionManager bean from spring jdbc jar(org.springframework.jdbc.datasource.DataSourceTransactionManager)
+		 using spring transaction manager it requires set datasource(javax.sql.DataSource) as property 
+		 ref look up beans's id in the container -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<!-- creating jdbcTemplate bean using spring jdbc
+		 autowire simple looks property by settername without set in this container.
+		 simply scan all bean ids  -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate" autowire="byName" />
+
+	<!-- dao bean creation
+		 autowire by constructor using required types in constructor -->
+	<bean id="bookDAO" class="com.vpp.chp18.BookDAOImpl" autowire="constructor"/>
+
+	<!-- setting jdbcTemplate as constructor arg -->
 	<bean id="accountDAO" class="com.vpp.chp18.AccountDAOImpl">
-		<constructor-arg ref="jdbcTemplate"/>
+		<constructor-arg ref="jdbcTemplate" />
 	</bean>
 
 	<bean id="bookService" class="com.vpp.chp18.BookServiceImpl">
-		<constructor-arg ref="bookDAO"/>
+		<constructor-arg ref="bookDAO" />
 	</bean>
+
 	<bean id="acountService" class="com.vpp.chp18.AccountServiceImpl">
-		<constructor-arg ref="accountDAO"/>
+		<constructor-arg ref="accountDAO" />
 	</bean>
-	
+
+	<!-- require two parameter for constructor 
+		 we can simply use autowire="constructor"-->
 	<bean id="purchasingService" class="com.vpp.chp18.PurchasingServiceImpl">
-		<constructor-arg ref="bookService"/>
-		<constructor-arg ref="acountService"/>
+		<constructor-arg ref="bookService" />
+		<constructor-arg ref="acountService" />
 	</bean>
+
+	<!-- this is a aspect bean creation -->
+	<bean id="performanceAuditing" class="com.vpp.chp18.PerformanceAuditingAspect"/>
 	
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource"/>
-	</bean>	
+	<!-- to use annotation driven Transaction -->
+	<tx:annotation-driven />
 	
-	<tx:annotation-driven/>
+	<!-- to use annotation driven Aspect -->
+	<aop:aspectj-autoproxy/>
+	
+	<!-- to use annotation driven beans(Service,Component,Repository are simply marker annotation)
+		<context:component-scan base-package="com.vpp.chp18"/>
+	 -->
 </beans>

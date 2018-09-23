@@ -12,7 +12,12 @@ public class Test {
 		ClassPathXmlApplicationContext container = new ClassPathXmlApplicationContext("chp18.xml");
 		
 //		BookService bs = container.getBean(BookService.class);
-//		bs.deleteBook("4567");
+//		try {
+//			bs.createNewBook(new Book("4567", "book1", "author1"));
+//		} catch (BookAlreadyExistException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		PurchasingService ps = container.getBean(PurchasingService.class);
 		try {

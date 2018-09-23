@@ -14,7 +14,7 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	@Transactional(timeout=3)
+	@Transactional
 	public void createNewBook(Book book) throws BookAlreadyExistException {
 		try { 
 			bookDAO.insertBook(book);
@@ -36,7 +36,6 @@ public class BookServiceImpl implements BookService {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.NESTED)
 	public void deleteBook(String isbn)throws BookNotFoundException {
 		
 		try {
